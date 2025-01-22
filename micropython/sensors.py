@@ -9,7 +9,7 @@ from ags10 import AGS10
 
 
 i2c = I2C(0, scl=Pin(17), sda=Pin(16))
-bme = BME280(i2c=i2c)
+bme = BME280(i2c=i2c, address=0x77)
 aht_sensor = aht.AHT2x(i2c, crc=False)
 ags_sensor = AGS10(i2c)
 

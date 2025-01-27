@@ -83,7 +83,8 @@ async def update_sensors_data(data):
     data['aht']['temperature'] = _mid(readings_aht_temperature)
 
 
-async def collect_sensors_data(data, test=False):    
+async def collect_sensors_data(data, test=False):
+    global readings_bme_temperature
     while True:
         await update_sensors_data(data)
         if test:

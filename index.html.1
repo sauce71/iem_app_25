@@ -1,0 +1,125 @@
+
+
+
+
+
+                        
+
+    <link href="/Content/css?v=QIAOzqU1L7UnONHr83uCmI9F0lWpsVwsrRFinf_aH-01" rel="stylesheet"/>
+
+
+ <script src="/scripts/vendor?v=4FSGRiwrHxQ84jvkUjcDZNmWcUZkeGhts6SYcLuWUBU1"></script>
+
+
+<div id="masthead">
+  
+  <div class="container">
+    
+    <div class="masthead-pad">
+      
+        <div class="masthead-text">
+            <div class="pull-right">
+                
+            </div>
+            <br/>
+            
+             <br/>
+          
+        </div> <!-- /.masthead-text -->
+      
+    </div>
+    
+  </div> <!-- /.container --> 
+  
+</div> <!-- /#masthead -->
+
+
+<div id="content">
+
+    <div class="container">
+        
+    
+<form action="/Account/Login" method="post"><input name="__RequestVerificationToken" type="hidden" value="jKbjG-8ZqFljNVcPn38h6d8WY1FLF0rsVO-9SZhWrVio68RMdyj56qlg6LXEQD4R0pW82xxxvCYi_C2ehUcJSoTlR0c1" />          <!-- ko if: shops().length == 0-->     
+          <h1>Innlogging MANI</h1>
+          <br />
+               <table>
+                   <tr>
+                       <td>Ansattnr&nbsp;&nbsp;</td>
+                       <td><input data-val="true" data-val-required="The User name field is required." id="UserName" name="UserName" type="text" value="" /></td>
+                       <td><span class="field-validation-valid" data-valmsg-for="UserName" data-valmsg-replace="true"></span></td>
+                   </tr>
+                   <tr>
+                       <td>Passord</td>
+                       <td><input data-val="true" data-val-required="The Password field is required." id="Password" name="Password" type="password" /></td>
+                       <td><span class="field-validation-valid" data-valmsg-for="Password" data-valmsg-replace="true"></span></td>
+                   </tr>
+                   <tr>
+                       <td>&nbsp;</td>
+                       <td colspan="2"><label class="checkbox" for="RememberMe"><input data-val="true" data-val-required="The Remember me? field is required." id="RememberMe" name="RememberMe" type="checkbox" value="true" /><input name="RememberMe" type="hidden" value="false" /> Husk meg</label></td>
+                   </tr>
+                   <tr>
+                       <td></td>
+                       <td><a id="btnSubmit" class="btn btn-primary">Logg inn</a></td>
+                   </tr>
+               </table>  
+          <!-- /ko -->
+          <!-- ko if: shops().length > 0-->
+          <h2>Velg hvilken butikk du vil logge inn på</h2>
+              <!-- ko foreach: shops() --> 
+              <h3 style="cursor: pointer;" data-bind="text: Name, click: $root.selectUnit"></h3>
+              <!-- /ko -->
+          <!-- /ko -->
+</form>                 
+    
+        
+    
+
+    </div> <!-- /.container -->
+
+</div> <!-- /#content -->
+
+<script>
+    $(document).ready(function() {
+        $("#btnSubmit").click(function() {
+            $("form").submit();
+            return false;
+        });
+
+        $("input").keyup(function(e) {
+            if (e.keyCode == 13) {
+                $("#btnSubmit").click();
+            }
+        });
+
+        $('#UserName').focus();
+
+    });
+
+
+    function dataViewModel() {
+        var self = this;
+        self.shops = ko.mapping.fromJS([]);
+        self.employeeId = ko.mapping.fromJS(0);
+
+        
+        self.selectUnit = function (unit) {
+            $.blockUI();
+            $.ajax({
+                contentType: 'application/json; charset=utf-8',
+                url: "/odata/Employees(" + self.employeeId() + ")",
+                dataType: "json",
+                type: 'PATCH',
+                data: JSON.stringify({ WebUnitId: unit.UnitId() }),
+                complete: function () {
+                    location.href = "/";
+                }
+            });
+        };
+    }
+
+    var dataModel = new dataViewModel();
+    ko.applyBindings(dataModel);
+
+
+</script>
+

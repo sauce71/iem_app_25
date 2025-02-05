@@ -5,25 +5,24 @@ import requests
 HTTP_HEADERS = {'Content-Type': 'application/json'}
 
 
-THINGSPEAK_WRITE_API_KEY = 'N51OSYW60IHW8IP6' # HER MÅ DERE BRUKE EGEN!!!
+THINGSPEAK_WRITE_API_KEY = '95N5X02QHYLKI573' # HER MÅ DERE BRUKE EGEN!!!
 THINGSPEAK_WRITE_URL = f'http://api.thingspeak.com/update?api_key={THINGSPEAK_WRITE_API_KEY}'
 
 def thingspeak_publish_data(data):
     """
     data = dict(
-        bme = dict(temperature=0, humidity=0, pressure=0),
-        ens = dict(tvoc=0, eco2=0, rating=''),
+        bme = dict(temperature=0, pressure=0),
+        ags = dict(tvoc=0),
         aht = dict(temperature=0, humidity=0),
         )
+
     """
     payload = {
         'field1' : data["bme"]["temperature"],
-        'field2' : data["bme"]["humidity"],
-        'field3' : data["bme"]["pressure"],
-        'field4' : data["ens"]["tvoc"],
-        'field5' : data["ens"]["eco2"],
-        'field6' : data["aht"]["temperature"],
-        'field7' : data["aht"]["humidity"],
+        'field2' : data["bme"]["pressure"],
+        'field3' : data["ags"]["tvoc"],
+        'field4' : data["aht"]["temperature"],
+        'field5' : data["aht"]["humidity"],
         }
     print(payload)
     r = requests.post(THINGSPEAK_WRITE_URL, json = payload, headers = HTTP_HEADERS)
@@ -37,9 +36,10 @@ if __name__ == '__main__':
     sta_if = connect()
     data = dict(
         bme = dict(temperature=0, humidity=0, pressure=0),
-        ens = dict(tvoc=0, eco2=0, rating=''),
+        ags = dict(tvoc=0),
         aht = dict(temperature=0, humidity=0),
         )
+
     r = thingspeak_publish_data(data)
     print(r.status_code)
     print(r.text)

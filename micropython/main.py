@@ -12,6 +12,10 @@ import buttons
 from thingspeak import thingspeak_publish_data
 from machine import WDT
 
+
+PUBLISH_INTERVAL_MS = 60000 # Endre denne til passende intervall
+
+
 sta_if = connect() # Kobler til trådløst nettverk
 
 naw = Nanoweb() # Lager en instans av Nanoweb
@@ -23,6 +27,8 @@ data = dict(
     )
 
 inputs = dict(button_1=False)
+
+
     
 @naw.route("/")
 def index(request):
@@ -46,8 +52,8 @@ def api_data(request):
 
 async def control_loop():
     while True:
-        #thingspeak_publish_data(data)
-        await uasyncio.sleep_ms(60*1000)
+        thingspeak_publish_data(data)
+        await uasyncio.sleep_ms(PUBLISH_INTERVAL_MS) 
         
 async def wdt_loop():
     wdt = WDT(timeout=8000)

@@ -7,10 +7,11 @@ import urequests
 
 import sensors
 from html_functions import naw_write_http_header, render_template
-#from leds import blink
+from leds import blink
 import buttons
 from thingspeak import thingspeak_publish_data
 from machine import WDT
+import gc
 
 
 PUBLISH_INTERVAL_MS = 60000 # Endre denne til passende intervall
@@ -53,6 +54,7 @@ def api_data(request):
 async def control_loop():
     while True:
         thingspeak_publish_data(data)
+        gc.collect()
         await uasyncio.sleep_ms(PUBLISH_INTERVAL_MS) 
         
 async def wdt_loop():
@@ -66,6 +68,7 @@ loop.create_task(sensors.collect_sensors_data(data, False))
 loop.create_task(buttons.wait_for_buttons(inputs))
 loop.create_task(naw.run())
 loop.create_task(control_loop())
+loop.create_task(blink())
 loop.create_task(wdt_loop())
 
 loop.run_forever()

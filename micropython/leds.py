@@ -1,12 +1,12 @@
 from machine import Pin
 import uasyncio
 
-LED_PIN_BLUE = 2
+LED_BLUE_PIN = 'LED'
 
-led_blue = Pin(2, Pin.OUT)
+led_blue = Pin(LED_BLUE_PIN, Pin.OUT)
 
 
-async def blink():    
+async def blink():
     while True:
         v = not led_blue.value()
         led_blue.value(v)

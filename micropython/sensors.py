@@ -29,10 +29,15 @@ async def read_bme():
 
 
 async def read_ags():
-    return ags_sensor.total_volatile_organic_compounds_ppb
+    tvoc = 0
+    if ags_sensor.is_ready:
+        tvoc = ags_sensor.total_volatile_organic_compounds_ppb
+    return tvoc
     
     
 async def read_aht():
+    temperature = 0
+    humidity = 0
     if aht_sensor.is_ready:
         temperature = aht_sensor.temperature
         humidity = aht_sensor.humidity  

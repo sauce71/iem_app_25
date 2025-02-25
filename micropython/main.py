@@ -17,6 +17,7 @@ import gc
 PUBLISH_INTERVAL_MS = 60000 # Endre denne til passende intervall
 
 
+
 sta_if = connect() # Kobler til trådløst nettverk
 
 naw = Nanoweb() # Lager en instans av Nanoweb
@@ -29,7 +30,7 @@ data = dict(
 
 inputs = dict(button_1=False)
 
-
+wdt = WDT(timeout=8000)
     
 @naw.route("/")
 def index(request):
@@ -54,8 +55,11 @@ def api_data(request):
 async def control_loop():
     while True:
         thingspeak_publish_data(data)
+        wdt.feed()
         gc.collect()
-        await uasyncio.sleep_ms(PUBLISH_INTERVAL_MS) 
+        for i in range(PUBLISH_INTERVAL_MS // 6000):
+            wdt.feed()
+            await uasyncio.sleep_ms(6000) 
         
 async def wdt_loop():
     wdt = WDT(timeout=8000)
@@ -69,7 +73,7 @@ loop.create_task(buttons.wait_for_buttons(inputs))
 loop.create_task(naw.run())
 loop.create_task(control_loop())
 loop.create_task(blink())
-loop.create_task(wdt_loop())
+#loop.create_task(wdt_loop())
 
 loop.run_forever()
     

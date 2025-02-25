@@ -24,7 +24,7 @@ def thingspeak_publish_data(data):
         'field4' : data["aht"]["temperature"],
         'field5' : data["aht"]["humidity"],
         }
-    print(payload)
+    #print(payload)
     r = requests.post(THINGSPEAK_WRITE_URL, json = payload, headers = HTTP_HEADERS)
     return r
     
